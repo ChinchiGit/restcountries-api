@@ -1,6 +1,8 @@
 
 const countriesNode = document.getElementById("countries");
 
+let allCountries;
+
 fetch("https://restcountries.com/v3.1/all")
   .then(res=>res.json())
     // fetch() returns a promise containing the response (a Response object).
@@ -8,25 +10,34 @@ fetch("https://restcountries.com/v3.1/all")
     // To extract the JSON body content from the response, 
     // we use the json() method and pass it into the next .then()
   .then(countries=> {
-    console.log(countries.length)
-    console.log(countries[7].flags.png)
-    console.log(countries[7].name.official)
+
+    allCountries = countries;
+    allCountries.sort(function (a, b) {
+      if (a.name.official > b.name.official) {
+        return 1;
+      }
+      if (a.name.official < b.name.official) {
+        return -1;
+      }
+      // a must be equal to b
+      return 0;
+    });
 
     // Here is where you'll need to add into the DOM all the countries received from API 
 
     let pintar = "";
-    for (let i = 0; i < countries.length; i++) {
+    for (let i = 0; i < allCountries.length; i++) {
       const cardTemplate = function () {
         return `<div class="card">
-                    <img id="flag-image" src= ${countries[i].flags.png} alt="flag" />
-                    <h1 class="center">${countries[i].name.official}</h1>
+                    <img id="flag-image" src= ${allCountries[i].flags.png} alt="flag" />
+                    <h1 class="center">${allCountries[i].name.official}</h1>
                   </div>`;
       };
-      pintar += cardTemplate (countries[i])
+      pintar += cardTemplate (allCountries[i])
     };
          
     console.log(pintar);
-    countriesNode.innerHTML = pintar
+    countriesNode.innerHTML=pintar;
   
     // 1 - We will need to iterate the countries variable with a loop
     // 2 - You can use the cardTemplate() function to create a div with a class card already styled
