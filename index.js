@@ -13,10 +13,10 @@ fetch("https://restcountries.com/v3.1/all")
 
     allCountries = countries;
     allCountries.sort(function (a, b) {
-      if (a.name.official > b.name.official) {
+      if (a.name.common > b.name.common) {
         return 1;
       }
-      if (a.name.official < b.name.official) {
+      if (a.name.common < b.name.common) {
         return -1;
       }
       // a must be equal to b
@@ -30,7 +30,7 @@ fetch("https://restcountries.com/v3.1/all")
       const cardTemplate = function () {
         return `<div class="card">
                     <img id="flag-image" src= ${allCountries[i].flags.png} alt="flag" />
-                    <h1 class="center">${allCountries[i].name.official}</h1>
+                    <h1 class="center">${allCountries[i].name.common}</h1>
                   </div>`;
       };
       pintar += cardTemplate (allCountries[i])
@@ -43,3 +43,42 @@ fetch("https://restcountries.com/v3.1/all")
     // 2 - You can use the cardTemplate() function to create a div with a class card already styled
     // 💡 you can use countriesNode variable to add elements
   });
+
+
+
+  // PREMIUM 
+
+const formulario = document.getElementById("continente")
+formulario.addEventListener("submit", function (event) {
+    event.preventDefault(); // parar envío formulario
+    console.log(event);
+
+    let continente = event.target.continente.value; 
+
+    pintar = "";
+    if (continente == "All") {
+      for (let i = 0; i < allCountries.length; i++) {
+          const cardTemplateB = function () {
+            return `<div class="card">
+                        <img id="flag-image" src= ${allCountries[i].flags.png} alt="flag" />
+                        <h1 class="center">${allCountries[i].name.common}</h1>
+                      </div>`;
+          };
+          pintar += cardTemplateB (allCountries[i])
+          countriesNode.innerHTML=pintar
+          };
+        }  else {
+            for (let i = 0; i < allCountries.length; i++) {
+              if (continente == allCountries[i].region){
+                const cardTemplateC = function () {
+                  return `<div class="card">
+                              <img id="flag-image" src= ${allCountries[i].flags.png} alt="flag" />
+                              <h1 class="center">${allCountries[i].name.common}</h1>
+                            </div>`;
+                };
+                pintar += cardTemplateC (allCountries[i])
+                countriesNode.innerHTML=pintar
+              };
+            }
+          }  
+});
